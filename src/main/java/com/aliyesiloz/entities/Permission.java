@@ -18,4 +18,6 @@ public class Permission {
 
     @Column(unique = true, nullable = false)
     private String name; // örnek: READ_USER, CREATE_USER
+    
+    private String description;
 }

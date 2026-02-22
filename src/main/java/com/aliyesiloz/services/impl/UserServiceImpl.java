@@ -1,51 +1,55 @@
 package com.aliyesiloz.services.impl;
 
+import com.aliyesiloz.entities.User;
+import com.aliyesiloz.repository.UserRepository;
+import com.aliyesiloz.services.IUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import com.aliyesiloz.entities.Role;
-import com.aliyesiloz.entities.User;
-import com.aliyesiloz.repository.RoleRepository;
-import com.aliyesiloz.repository.UserRepository;
-import com.aliyesiloz.services.IUserService;
-
-import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements IUserService {
 
     private final UserRepository userRepository;
-    private final RoleRepository roleRepository;
 
     @Override
-    public User createUser(User user) {
-        if (user.getRoles() == null) {
-            user.setRoles(new HashSet<>()); // boş set ile başlat
-        }
+    public User saveUser(User user) {
         return userRepository.save(user);
     }
 
     @Override
-    public void assignRoleToUser(String username, String roleName) {
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("User not found"));
-
-        Role role = roleRepository.findByName(roleName)
-                .orElseThrow(() -> new RuntimeException("Role not found"));
-
-        user.getRoles().add(role);
-        userRepository.save(user);
+    public Optional<User> getUserById(Long id) {
+        return userRepository.findById(id);
     }
+
+    @Override
+    public Optional<User> getUserByUsername(String username) {
+        return userRepository.findByUsername(username);
+    }
+
     @Override
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }
 
     @Override
-    public User getUserById(Long id) {
+    public void deleteUser(Long id) {
+        userRepository.deleteById(id);
+    }
+
+    @Override
+    public User updateUser(Long id, User updatedUser) {
         return userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .map(user -> {
+                    user.setUsername(updatedUser.getUsername());
+                    user.setPassword(updatedUser.getPassword());
+                    user.setEmail(updatedUser.getEmail());
+                    // burada başka alanlar varsa onları da set et
+                    return userRepository.save(user);
+                })
+                .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
     }
 }

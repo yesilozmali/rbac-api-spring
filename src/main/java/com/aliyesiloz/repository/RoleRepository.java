@@ -1,8 +1,7 @@
 package com.aliyesiloz.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-
 import com.aliyesiloz.entities.Role;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 

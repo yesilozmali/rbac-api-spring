@@ -16,11 +16,15 @@ public class Role {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+
     private Long id;
 
     @Column(unique = true, nullable = false)
     private String name; // örnek: ADMIN, USER, MANAGER
 
+    private String description;
+    
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "role_permissions",

@@ -3,7 +3,6 @@ package com.aliyesiloz.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.Set;
 
 @Entity
 @Getter
@@ -21,17 +20,22 @@ public class User {
     @Column(unique = true, nullable = false)
     private String username;
 
+    private String fullName;
+    
     @Column(nullable = false)
     private String password;
 
+    @Enumerated(EnumType.STRING)
+    private Status status;
+    
     @Column(unique = true)
     private String email;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "user_roles",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id")
-    )
-    private Set<Role> roles;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "role_id", referencedColumnName = "id",  nullable = false)
+    private Role role;
+    
+    enum Status {
+    	ACTIVE, INACTIVE
+    	}
 }

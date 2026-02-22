@@ -1,40 +1,49 @@
 package com.aliyesiloz.services.impl;
 
+import com.aliyesiloz.entities.Role;
+import com.aliyesiloz.services.IRoleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import com.aliyesiloz.entities.Permission;
-import com.aliyesiloz.entities.Role;
-import com.aliyesiloz.repository.PermissionRepository;
-import com.aliyesiloz.repository.RoleRepository;
-import com.aliyesiloz.services.IRoleService;
-
-import java.util.HashSet;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class RoleServiceImpl implements IRoleService {
+public class RoleServiceImpl implements IRoleService {@Override
+	public Role saveRole(Role role) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
-    private final RoleRepository roleRepository;
-    private final PermissionRepository permissionRepository;
+	@Override
+	public Role updateRole(Long id, Role role) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
-    @Override
-    public Role createRole(Role role) {
-        if (role.getPermissions() == null) {
-            role.setPermissions(new HashSet<>());
-        }
-        return roleRepository.save(role);
-    }
+	@Override
+	public Role getRoleById(Long id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
-    @Override
-    public void assignPermissionToRole(String roleName, String permissionName) {
-        Role role = roleRepository.findByName(roleName)
-                .orElseThrow(() -> new RuntimeException("Role not found"));
+	@Override
+	public Role getRoleByName(String name) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
-        Permission permission = permissionRepository.findByName(permissionName)
-                .orElseThrow(() -> new RuntimeException("Permission not found"));
+	@Override
+	public List<Role> getAllRoles() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
-        role.getPermissions().add(permission);
-        roleRepository.save(role);
-    }
+	@Override
+	public void deleteRole(Long id) {
+		// TODO Auto-generated method stub
+		
+	}
+
+  
 }

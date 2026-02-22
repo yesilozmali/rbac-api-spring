@@ -3,10 +3,11 @@ package com.aliyesiloz.controller;
 import com.aliyesiloz.entities.User;
 import com.aliyesiloz.services.IUserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
-import org.springframework.web.bind.annotation.*;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/users")
@@ -15,28 +16,29 @@ public class UserController {
 
     private final IUserService userService;
 
-    // Yeni kullanıcı oluştur
     @PostMapping
-    public User createUser(@RequestBody User user) {
-        return userService.createUser(user);
+    public ResponseEntity<User> addUser(@RequestBody User user) {
+        return ResponseEntity.ok(userService.saveUser(user));
     }
 
-    // Kullanıcıya rol ata
-    @PostMapping("/{username}/roles/{roleName}")
-    public String assignRoleToUser(@PathVariable String username, @PathVariable String roleName) {
-        userService.assignRoleToUser(username, roleName);
-        return "Role assigned successfully!";
-    }
- // Tüm kullanıcıları listele
     @GetMapping
-    public List<User> getAllUsers() {
-        return userService.getAllUsers();
+    public ResponseEntity<List<User>> getAllUsers() {
+        return ResponseEntity.ok(userService.getAllUsers());
     }
 
-    // ID'ye göre kullanıcı getir
     @GetMapping("/{id}")
-    public User getUserById(@PathVariable Long id) {
-        return userService.getUserById(id);
+    public ResponseEntity<Optional<User>> getUserById(@PathVariable Long id) {
+        return ResponseEntity.ok(userService.getUserById(id));
     }
-    
+
+    @PutMapping("/{id}")
+    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User user) {
+        return ResponseEntity.ok(userService.updateUser(id, user));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteUser(@PathVariable Long id) {
+        userService.deleteUser(id);
+        return ResponseEntity.ok("User deleted successfully");
+    }
 }
